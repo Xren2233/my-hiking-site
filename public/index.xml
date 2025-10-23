@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Маршруты для прогулок</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Маршруты для прогулок</description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 15 Jan 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>города</title>
+      <link>http://localhost:1313/routes/simple/</link>
+      <pubDate>Mon, 15 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/routes/simple/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Озеро в лесу</title>
+      <link>http://localhost:1313/routes/test-city/</link>
+      <pubDate>Mon, 15 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/routes/test-city/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Прогулка по лесопарку</title>
+      <link>http://localhost:1313/routes/city/</link>
+      <pubDate>Mon, 15 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/routes/city/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Озеро в лесу - Маршруты для прогулок</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .back-link {
+            margin-bottom: 20px;
+        }
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .route-header {
+            margin-bottom: 30px;
+        }
+        .route-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .route-badge.forest { background: #48bb78; }
+        .route-badge.city { background: #4299e1; }
+        .route-badge.nature { background: #ed8936; }
+        .route-meta {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+        .map-controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .map-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .map-btn:hover {
+            background: #5a67d8;
+        }
+        #map {
+            height: 500px;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        .route-points {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .route-point {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-link">
+            <a href="/">← Назад ко всем маршрутам</a>
+        </div>
+
+        <div class="route-header">
+            <h1>Озеро в лесу</h1>
+            <div class="route-badge лесной">лесной</div>
+        </div>
+
+        <div class="route-meta">
+            <div class="meta-item">
+                <strong>5 км</strong>
+            </div>
+            <div class="meta-item">
+                <strong>49 часов</strong>
+            </div>
+            <div class="meta-item">
+                <strong>сложный</strong>
+            </div>
+            <div class="meta-item">
+                <strong>Центральный парк</strong>
+            </div>
+        </div>
+
+                <div class="route-content">
+            
+        </div>
+
+        <h2>Маршрут прогулки</h2>
+
+        <div class="map-controls">
+                
+
+        </div>
+
+        <div id="map"></div>
+
+        
+        <div class="route-points">
+            <h3>Ключевые точки маршрута:</h3>
+            
+            <div class="route-point">
+                <strong>озеро</strong><br>
+                Главный вход в лесопарк
+            </div>
+            
+            <div class="route-point">
+                <strong>Озеро</strong><br>
+                Живописное озеро с утками
+            </div>
+            
+            <div class="route-point">
+                <strong>Смотровая площадка</strong><br>
+                Вид на озеро
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=43603592-480f-4007-b8f4-c328a96e580b&lang=ru_RU" type="text/javascript"></script>
+<script type="text/javascript">
+    var myMap, route;
+    
+    ymaps.ready(function() {
+        console.log('Яндекс.Карты готовы');
+        
+        var center = [55.7558, 37.6173];
+        
+        myMap = new ymaps.Map('map', {
+            center: center,
+            zoom: 13,
+            controls: ['zoomControl', 'fullscreenControl', 'routeButtonControl']
+        });
+        
+        addRouteControls();
+    });
+    
+    function addRouteControls() {
+        var routeControl = document.querySelector('.map-controls');
+        if (routeControl) {
+            routeControl.innerHTML = `
+                <button class="map-btn" onclick="buildPedestrianRoute()">Пеший маршрут</button>
+            
+                <button class="map-btn" onclick="clearRoute()">Очистить маршрут</button>
+            `;
+        }
+    }
+    
+    function buildPedestrianRoute() {
+        clearRoute();
+        
+        var routePoints = getRoutePoints();
+        
+        route = new ymaps.multiRouter.MultiRoute({
+            referencePoints: routePoints,
+            params: {
+                routingMode: 'pedestrian'
+            }
+        }, {
+            boundsAutoApply: true,  
+            wayPointStartIconColor: '#1e98ff',
+            wayPointFinishIconColor: '#1e98ff',
+            routeActiveStrokeWidth: 6,
+            routeActiveStrokeColor: '#667eea'
+        });
+        
+        myMap.geoObjects.add(route);
+    }
+    
+    function buildAutoRoute() {
+        clearRoute();
+        
+        var routePoints = getRoutePoints();
+        
+        route = new ymaps.multiRouter.MultiRoute({
+            referencePoints: routePoints,
+            params: {
+                routingMode: 'auto'  
+            }
+        }, {
+            boundsAutoApply: true,
+            wayPointStartIconColor: '#1e98ff',
+            wayPointFinishIconColor: '#1e98ff',
+            routeActiveStrokeWidth: 6,
+            routeActiveStrokeColor: '#48bb78'
+        });
+        
+        myMap.geoObjects.add(route);
+    }
+    
+    
+    function getRoutePoints() {
+        
+        return [
+            
+            [[55.987319,37.6187]],
+            
+            [[55.676,36.662]],
+            
+            [[55.779,37.61]],
+            
+        ];
+        
+    }
+    
+    function clearRoute() {
+        if (route) {
+            myMap.geoObjects.remove(route);
+            route = null;
+        }
+    }
+</script>
+</body>
+</html>
